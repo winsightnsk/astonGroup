@@ -10,6 +10,4 @@ public abstract class ABCContainer<T1,T2,T3,TC extends ABC<T1,T2,T3>> {
     public List<TC> getList() { return list; }
     public void add(TC instance) { list.add(instance); };
 
-
-
 }

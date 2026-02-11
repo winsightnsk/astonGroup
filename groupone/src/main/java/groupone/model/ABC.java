@@ -10,7 +10,7 @@ public abstract class ABC<T1,T2,T3> {
         throw new RuntimeException(this.getClass().getSimpleName()
                 + ": экземпляр может быть создан только через билдер");
     }
-    private ABC(T1 field1, T2 field2, T3 field3) {
+    ABC(T1 field1, T2 field2, T3 field3) {
         this.field1 = field1;
         this.field2 = field2;
         this.field3 = field3;
@@ -34,18 +34,18 @@ public abstract class ABC<T1,T2,T3> {
      * @param <TC> сам класс наследник
      */
     public abstract static class Builder<T1,T2,T3,TC extends ABC<T1,T2,T3>> {
-        private T1 field1;
-        private T2 field2;
-        private T3 field3;
-        public Builder<T1,T2,T3,TC> field1(T1 value) {
+        protected T1 field1;
+        protected T2 field2;
+        protected T3 field3;
+        public Builder<T1,T2,T3,TC> setField1(T1 value) {
             field1 = value;
             return this;
         }
-        public Builder<T1,T2,T3,TC> field2(T2 value) {
+        public Builder<T1,T2,T3,TC> setField2(T2 value) {
             field2 = value;
             return this;
         }
-        public Builder<T1,T2,T3,TC> field3(T3 value) {
+        public Builder<T1,T2,T3,TC> setField3(T3 value) {
             field3 = value;
             return this;
         }
