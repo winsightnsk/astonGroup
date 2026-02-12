@@ -1,4 +1,4 @@
 package groupone.domain;
 
-public interface domainInterface {
+public interface DomainInterface {
 }

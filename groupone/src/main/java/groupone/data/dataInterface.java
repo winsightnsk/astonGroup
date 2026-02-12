@@ -1,5 +1,6 @@
 package groupone.data;
 
-public interface dataInterface {
-    String nextLine();
+import java.util.Iterator;
+
+public interface DataInterface extends Iterable<String> {
 }
