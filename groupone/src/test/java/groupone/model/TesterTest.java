@@ -1,8 +1,12 @@
 package groupone.model;
 
 import groupone.data.DataInterface;
+import groupone.data.FileReader;
 import groupone.data.RandomGenerator;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TesterTest {

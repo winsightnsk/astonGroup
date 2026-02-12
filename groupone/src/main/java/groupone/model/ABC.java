@@ -27,9 +27,7 @@ public abstract class ABC<T1,T2,T3> {
     public T3 getField3() {
         return field3;
     }
-    public Class<?> getF1Class() { return field1.getClass(); }
-    public Class<?> getF2Class() { return field2.getClass(); }
-    public Class<?> getF3Class() { return field3.getClass(); }
+
     public List<Class<?>> listClasses() {
         return List.of(field1.getClass(), field2.getClass(), field3.getClass());
     }

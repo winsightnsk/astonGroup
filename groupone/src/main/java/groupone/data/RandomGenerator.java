@@ -3,9 +3,8 @@ package groupone.data;
 import java.util.*;
 
 import com.github.javafaker.Faker;
-import org.jetbrains.annotations.NotNull;
 
-public class RandomGenerator extends DataABC implements Iterator<String> {
+public class RandomGenerator extends DataABC {
 
     private List<Class<?>> classList;
 
@@ -18,12 +17,6 @@ public class RandomGenerator extends DataABC implements Iterator<String> {
             throw new RuntimeException("Ошибка входных параметров");
         this.count = count;
         classList = classes;
-    }
-
-
-    @Override
-    public boolean hasNext() {
-        return i < count;
     }
 
     @Override
@@ -43,10 +36,4 @@ public class RandomGenerator extends DataABC implements Iterator<String> {
         return String.join(", ", list);
     }
 
-
-    @Override
-    @NotNull
-    public Iterator<String> iterator() {
-        return this;
-    }
 }
