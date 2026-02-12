@@ -1,16 +1,18 @@
 package groupone.model;
 
-public abstract class ABC<T1,T2,T3> {
+import java.util.List;
+
+public abstract class ABC_deprecated<T1,T2,T3> {
 
     protected T1 field1;
     protected T2 field2;
     protected T3 field3;
 
-    private ABC() {
+    private ABC_deprecated() {
         throw new RuntimeException(this.getClass().getSimpleName()
                 + ": экземпляр может быть создан только через билдер");
     }
-    ABC(T1 field1, T2 field2, T3 field3) {
+    ABC_deprecated(T1 field1, T2 field2, T3 field3) {
         this.field1 = field1;
         this.field2 = field2;
         this.field3 = field3;
@@ -26,6 +28,10 @@ public abstract class ABC<T1,T2,T3> {
         return field3;
     }
 
+    public List<Class<?>> listClasses() {
+        return List.of(field1.getClass(), field2.getClass(), field3.getClass());
+    }
+
     /**
      * Билдер:
      * @param <T1> тип первого поля
@@ -33,7 +39,7 @@ public abstract class ABC<T1,T2,T3> {
      * @param <T3> тип третьего поля
      * @param <TC> сам класс наследник
      */
-    public abstract static class Builder<T1,T2,T3,TC extends ABC<T1,T2,T3>> {
+    public abstract static class Builder<T1,T2,T3,TC extends ABC_deprecated<T1,T2,T3>> {
         protected T1 field1;
         protected T2 field2;
         protected T3 field3;

@@ -2,7 +2,6 @@
 <module version="4">
   <component name="AdditionalModuleElements">
     <content url="file://$MODULE_DIR$/../../groupone/src/test" dumb="true">
-      <sourceFolder url="file://$MODULE_DIR$/../../groupone/src/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../groupone/src/test/java" isTestSource="true" />
     </content>
   </component>
