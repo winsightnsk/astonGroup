@@ -17,6 +17,15 @@ public class User {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+
     public abstract static class Builder {
         private String username;
         private String password;

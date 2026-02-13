@@ -1,0 +1,81 @@
+package groupone.domain;
+
+import groupone.model.User;
+
+import java.util.Comparator;
+import java.util.List;
+
+interface SortStrategy {
+    void sort(List<User> list);
+}
+
+public class DataSort {
+    public static SortStrategy SortByUsername = new SortByUsername();
+    public static SortStrategy SortByPassword = new SortByPassword();
+    public static SortStrategy SortByEmail = new SortByEmail();
+    private SortStrategy sortStrategy;
+
+    public void setSortStrategy(SortStrategy sortStrategy) {
+        this.sortStrategy = sortStrategy;
+    }
+
+    public void sort(List<User> list) {
+        this.sortStrategy.sort(list);
+    }
+
+    static void quicksort(List<User> list, Comparator<User> comp, int start, int end) {
+        if (start < end) {
+            int pivotIndex = partition(list, comp, start, end);
+
+            quicksort(list, comp, start, pivotIndex - 1);
+            quicksort(list, comp, pivotIndex + 1, end);
+        }
+    }
+
+    static int partition(List<User> list, Comparator<User> comp, int start, int end) {
+        User pivot = list.get(end);
+
+        int i = start - 1;
+        for (int j = start; j < end; j++) {
+            // Компаратор возвращает 0, если элементы раваны; 1, если первый больше второго и -1, если наоборот
+            if (comp.compare(list.get(j), pivot) < 0) {
+                i++;
+
+                swap(list, i, j);
+            }
+        }
+
+        swap(list, i + 1, end);
+        return (i + 1);
+    }
+
+    static void swap(List<User> list, int x, int y) {
+        User user = list.get(x);
+        list.set(x, list.get(y));
+        list.set(y, user);
+    }
+
+    public static class SortByUsername implements SortStrategy {
+        @Override
+        public void sort(List<User> list) {
+            // Java 8+ позволяет не писать компаратор вручную для каждого поля
+            quicksort(list, Comparator.comparing(User::getUsername), 0, list.size() - 1);
+        }
+    }
+
+    public static class SortByPassword implements SortStrategy {
+        @Override
+        public void sort(List<User> list) {
+            // Java 8+ позволяет не писать компаратор вручную для каждого поля
+            quicksort(list, Comparator.comparing(User::getPassword), 0, list.size() - 1);
+        }
+    }
+
+    public static class SortByEmail implements SortStrategy {
+        @Override
+        public void sort(List<User> list) {
+            // Java 8+ позволяет не писать компаратор вручную для каждого поля
+            quicksort(list, Comparator.comparing(User::getEmail), 0, list.size() - 1);
+        }
+    }
+}
