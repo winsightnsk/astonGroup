@@ -19,7 +19,7 @@ public class RandomGenerator extends DataABC {
     public String next() {
         List<String> list = new ArrayList<>();
         list.add(faker.name().firstName());
-        list.add(faker.lorem().word());
+        list.add(String.valueOf(rnd.nextInt(9999, 100000)));
         list.add(faker.internet().emailAddress());
         this.i += 1;
         return String.join(", ", list);
