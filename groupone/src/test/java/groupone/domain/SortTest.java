@@ -1,0 +1,51 @@
+package groupone.domain;
+
+import groupone.data.DataInterface;
+import groupone.data.RandomGenerator;
+import groupone.model.User;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Comparator;
+import java.util.LinkedList;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class SortTest {
+    public static <T> boolean isSorted(Iterable<? extends T> iterable, Comparator<? super T> comparator) {
+        T previous = null;
+        boolean firstElement = true;
+
+        for (T current : iterable) {
+            if (firstElement) {
+                firstElement = false;
+            } else {
+                if (comparator.compare(previous, current) > 0) {
+                    return false;
+                }
+            }
+            previous = current;
+        }
+        return true;
+    }
+
+    @Test
+    void testIsSorted() {
+        LinkedList<User> users = new LinkedList<>();
+        DataInterface di = new RandomGenerator(50);
+        di.forEach(item -> users.add(new User.Builder().setLine(item).build()));
+
+        SortContext context = new SortContext();
+        context.setSortStrategy(new SortByUsernameStrategy());
+        context.sort(users);
+        Assertions.assertTrue(isSorted(users, Comparator.comparing(User::getUsername)));
+
+        context.setSortStrategy(new SortByPasswordStrategy());
+        context.sort(users);
+        Assertions.assertTrue(isSorted(users, Comparator.comparing(User::getPassword)));
+
+        context.setSortStrategy(new SortByEmailStrategy());
+        context.sort(users);
+        Assertions.assertTrue(isSorted(users, Comparator.comparing(User::getEmail)));
+    }
+}
