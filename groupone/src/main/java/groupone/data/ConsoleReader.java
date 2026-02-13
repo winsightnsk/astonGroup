@@ -1,11 +1,12 @@
 package groupone.data;
 
 public class ConsoleReader extends DataABC {
+    private final Scanner scanner;
 
     public ConsoleReader(int count) {
         if (count <= 0) throw new RuntimeException("Ошибка входных параметров");
         this.count = count;
-        this.scanner = new Scanner(System.in);
+        this.scanner = scanner;
     }
 
     @Override
