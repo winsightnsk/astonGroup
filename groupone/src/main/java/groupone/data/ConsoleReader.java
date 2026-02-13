@@ -1,9 +1,11 @@
 package groupone.data;
 
+import java.util.Scanner;
+
 public class ConsoleReader extends DataABC {
     private final Scanner scanner;
 
-    public ConsoleReader(int count) {
+    public ConsoleReader(int count, Scanner scanner) {
         if (count <= 0) throw new RuntimeException("Ошибка входных параметров");
         this.count = count;
         this.scanner = scanner;
