@@ -6,7 +6,6 @@ import groupone.model.UserABC;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
 public class Quicksort {
     public static void quicksort(List<User> list, Comparator<User> comp, int start, int end) {
