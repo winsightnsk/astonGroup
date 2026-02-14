@@ -1,40 +1,48 @@
 package groupone.data;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
 
-public class FileReader extends DataABC implements AutoCloseable {
+public class FileReader extends DataABC {
     private final BufferedReader _bufferedReader;
     private String _nextLine;
+    private String[] _lines;
+    private int _index = 0;
 
-
-    public FileReader(int count, String path) throws IOException {
+    public FileReader(int count, String path) {
         if (count <= 0) throw new RuntimeException("Ошибка входных параметров");
         this.count = count;
 
-        this._bufferedReader = new BufferedReader(new java.io.FileReader(path));
+        try {
+            this._bufferedReader = new BufferedReader(new java.io.FileReader(path));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        readLines();
         readLine();
     }
 
-    private void readLine(){
-        try {
-            _nextLine = _bufferedReader.readLine();
-            Pattern pattern = Pattern.compile("([^\\s,;.]+)[\\s,;.]+([^\\s,;]+)[\\s,;]+([\\w.-]+@[\\w.-]+\\.[a-z]{2,})");
-            if(hasNext()){
-                Matcher matcher = pattern.matcher(_nextLine);
-                if(matcher.find())
-                    _nextLine = String.join(", ", matcher.group(1), matcher.group(2), matcher.group(3));
-                else
-                    throw new RuntimeException("Regex error");
+    private void readLines(){
+        try{
+            List<String> lines = new ArrayList<>();
+            String line;
+            while((line = _bufferedReader.readLine()) != null){
+                lines.add(line);
             }
+            _lines = lines.toArray(new String[0]);
+            _bufferedReader.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void readLine(){
+        if(_index < _lines.length)
+            _nextLine = _lines[_index++];
+        else
+            _nextLine = null;
     }
 
     @Override
@@ -49,24 +57,8 @@ public class FileReader extends DataABC implements AutoCloseable {
         return line;
     }
 
-    @Override
-    @NotNull
-    public Iterator<String> iterator() {
-        return new Iterator<>() {
-            @Override
-            public boolean hasNext() {
-                return FileReader.this.hasNext();
-            }
-
-            @Override
-            public String next() {
-                return FileReader.this.next();
-            }
-        };
-    }
-
-    @Override
-    public void close() throws IOException {
-        _bufferedReader.close();
+    public void reset(){
+        this._index = 0;
+        readLine();
     }
 }
