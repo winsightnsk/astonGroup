@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Comparator;
 import java.util.LinkedList;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class SortTest {
     public static <T> boolean isSorted(Iterable<? extends T> iterable, Comparator<? super T> comparator) {
         T previous = null;
@@ -35,7 +33,7 @@ class SortTest {
         DataInterface di = new RandomGenerator(50);
         di.forEach(item -> users.add(new User.Builder().setLine(item).build()));
 
-        SortContext context = new SortContext();
+        SortInterface context = new SortContext();
         context.setSortStrategy(new SortByUsernameStrategy());
         context.sort(users);
         Assertions.assertTrue(isSorted(users, Comparator.comparing(User::getUsername)));
