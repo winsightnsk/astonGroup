@@ -5,7 +5,7 @@ class ConsoleReaderTest {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        ConsoleReader reader = new ConsoleReader(2, scanner);
+        DataInterface reader = new ConsoleReader(2, scanner);
 
         System.out.println("=== Тестирование ConsoleReader ===");
         System.out.println("Введите данные для двух пользователей (имя, пароль, email).");
