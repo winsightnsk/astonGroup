@@ -7,41 +7,45 @@ import java.util.*;
 public class FileReader extends DataABC {
     private final BufferedReader _bufferedReader;
     private String _nextLine;
-    private String[] _lines;
-    private int _index = 0;
+    private boolean finish = false;
+
+    public FileReader(String path){
+        this(-1, path);
+    }
 
     public FileReader(int count, String path) {
-        if (count <= 0) throw new RuntimeException("FileReader: Ошибка входных параметров: " + count);
+        if (count <= 0 && count != -1)
+            throw new RuntimeException("FileReader: Ошибка входных параметров: " + count);
         this.count = count;
 
         try {
-            this._bufferedReader = new BufferedReader(new java.io.FileReader(path));
+            _bufferedReader = new BufferedReader(new java.io.FileReader(path));
+            readLine();
         } catch (IOException e) {
-            throw new RuntimeException("FileReader: Ошибка чтения файла: " + path, e);
+            throw new RuntimeException("FileReader: Файл не найден: " + path, e);
         }
-        readLines();
-        readLine();
     }
 
-    private void readLines(){
-        try{
-            List<String> lines = new ArrayList<>();
-            String line;
-            while((line = _bufferedReader.readLine()) != null){
-                lines.add(line);
+    private void readLine() {
+        if(finish)
+            return;
+
+        try {
+            if(count != -1)
+                if(i++ >= count){
+                    _nextLine = null;
+                    _bufferedReader.close();
+                    finish = true;
+                    return;
+                }
+            _nextLine = _bufferedReader.readLine();
+            if(_nextLine == null){
+                _bufferedReader.close();
+                finish = true;
             }
-            _lines = lines.toArray(new String[0]);
-            _bufferedReader.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("FileReader: Ошибка чтения файла");
         }
-    }
-
-    private void readLine(){
-        if(_index < _lines.length)
-            _nextLine = _lines[_index++];
-        else
-            _nextLine = null;
     }
 
     @Override
@@ -54,10 +58,5 @@ public class FileReader extends DataABC {
         String line = _nextLine;
         readLine();
         return line;
-    }
-
-    public void reset(){
-        this._index = 0;
-        readLine();
     }
 }
