@@ -58,6 +58,7 @@ class SearchAsyncTest {
         assertEquals(0, (new SearchAsync(list)).matchesCount("иванов"));
         assertEquals(1, (new SearchAsync(list)).matchesCount("КузнЕцов"));
         assertEquals(1, (new SearchAsync(list)).matchesCount("Васильева Елена Александровна"));
+        assertEquals(6, (new SearchAsync(list)).matchesCount("ЕЕ"));
     }
 
 }
