@@ -19,7 +19,9 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.5.29")
     // Source: https://mvnrepository.com/artifact/ch.qos.logback/logback-core
     implementation("ch.qos.logback:logback-core:1.5.29")
-    implementation("org.slf4j:slf4j-api:2.0.9")
+    implementation("ch.qos.logback:logback-classic:1.4.11")
+    implementation("org.slf4j:slf4j-api:2.0.13")
+    runtimeOnly("org.slf4j:slf4j-simple:2.0.13")
 }
 
 tasks.test {
