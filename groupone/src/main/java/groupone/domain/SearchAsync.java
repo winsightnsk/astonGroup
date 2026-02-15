@@ -1,6 +1,5 @@
 package groupone.domain;
 
-import groupone.Main;
 import groupone.model.UserABC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +11,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class SearchAsinc implements SearchInterface {
-    private static final Logger logger = LoggerFactory.getLogger(SearchAsinc.class.getName());
+public class SearchAsync implements SearchInterface {
+    private static final Logger logger = LoggerFactory.getLogger(SearchAsync.class.getName());
 
 
     private final int threadCount;
@@ -23,7 +22,7 @@ public class SearchAsinc implements SearchInterface {
         return Math.min(n, Runtime.getRuntime().availableProcessors());
     }
 
-    public SearchAsinc(List<UserABC> list) {
+    public SearchAsync(List<UserABC> list) {
         logger.info(String.valueOf(Runtime.getRuntime().availableProcessors()));
         userList = list;
         threadCount = calculator(list.size());
@@ -31,6 +30,7 @@ public class SearchAsinc implements SearchInterface {
 
     @Override
     public int matchesCount(String text) {
+        if (text == null || text.isEmpty()) return 0;
         int count = 0;
 
         try (ExecutorService executor = Executors.newFixedThreadPool(threadCount)) {
