@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.*;
 
 public class FileReader extends DataABC {
-    private final BufferedReader _bufferedReader;
     private String _nextLine;
     private String[] _lines;
     private int _index = 0;
@@ -14,27 +13,20 @@ public class FileReader extends DataABC {
         if (count <= 0) throw new RuntimeException("FileReader: Ошибка входных параметров: " + count);
         this.count = count;
 
-        try {
-            this._bufferedReader = new BufferedReader(new java.io.FileReader(path));
-        } catch (IOException e) {
-            throw new RuntimeException("FileReader: Ошибка чтения файла: " + path, e);
-        }
-        readLines();
-        readLine();
-    }
-
-    private void readLines(){
-        try{
+        try(BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(path))){
             List<String> lines = new ArrayList<>();
             String line;
-            while((line = _bufferedReader.readLine()) != null){
+            while((line = bufferedReader.readLine()) != null) {
+                if(i++ >= count)
+                    break;
                 lines.add(line);
             }
             _lines = lines.toArray(new String[0]);
-            _bufferedReader.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        }catch(IOException e){
+            throw new RuntimeException("FileReader: Ошибка чтения файла: " + path, e);
         }
+
+        readLine();
     }
 
     private void readLine(){
@@ -54,10 +46,5 @@ public class FileReader extends DataABC {
         String line = _nextLine;
         readLine();
         return line;
-    }
-
-    public void reset(){
-        this._index = 0;
-        readLine();
     }
 }
