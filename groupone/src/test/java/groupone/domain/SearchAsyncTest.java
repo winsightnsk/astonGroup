@@ -32,10 +32,8 @@ class SearchAsyncTest {
 
         Stream.of(
                         "Петрова Мария Сергеевна, 67890, petrova@mail.ru",                     // полный формат
-                        "Сидоров-Морозов Дмитрий, 54321, sidorov-morozov@mail.ru",          // двойная фамилия, без отчества
                         "Кузнецова Анна Владимировна, 98765, kuznetsova@mail.ru",            // полный формат
                         "Морозов Сергей, 11223, morozov@mail.ru",                             // без отчества
-                        "Николаев-Фёдоров Андрей Михайлович, 77889, nikolaev-fedorov@mail.ru", // двойная фамилия
                         "Фёдорова, 33445, fedorova@mail.ru",                                 // только фамилия (отсутствуют имя и отчество)
                         "Алексеев Иван Сергеевич, 66778, alekseev@mail.ru",                  // полный формат
                         "Григорьева Татьяна, 99001, grigoreva@mail.ru",                      // без отчества
@@ -60,9 +58,6 @@ class SearchAsyncTest {
         assertEquals(0, (new SearchAsync(list)).matchesCount("иванов"));
         assertEquals(1, (new SearchAsync(list)).matchesCount("КузнЕцов"));
         assertEquals(1, (new SearchAsync(list)).matchesCount("Васильева Елена Александровна"));
-//        assertEquals(14, (new SearchAsync(list)).matchesCount("а"));
-        assertEquals(1, (new SearchAsync(list)).matchesCount("-"));
-
-
     }
+
 }

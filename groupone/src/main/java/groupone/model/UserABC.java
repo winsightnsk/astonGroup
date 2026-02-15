@@ -19,14 +19,14 @@ public abstract class UserABC {
 
     /**
      * Проверка заполнения полей на валидность данных
-     * Имя пользователя: одно или больше слов через один пробел или дефис;
+     * Имя пользователя: одно или больше слов через один пробел
      * пароль: число больше или равно нулю;
      * Е-мэйл: поддерживает точки в имени (не повторяющиеся)
      * @return True если всё хорошо
      */
     public boolean isValid() {
         if (username == null || email == null) { return false; }
-        return (username.matches("^([a-zA-Zа-яА-Я]+([-\\s][a-zA-Zа-яА-Я]+)*)$")
+        return (username.matches("^([a-zA-Zа-яА-Я]+(\\s[a-zA-Zа-яА-Я]+)*)$")
                 && password >= 0
                 && email.matches("^([a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+\\.[a-zA-Z]+)$"));
     }
