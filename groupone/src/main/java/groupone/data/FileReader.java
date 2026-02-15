@@ -5,35 +5,32 @@ import java.io.IOException;
 import java.util.*;
 
 public class FileReader extends DataABC {
+    private final BufferedReader _bufferedReader;
     private String _nextLine;
-    private String[] _lines;
-    private int _index = 0;
 
     public FileReader(int count, String path) {
         if (count <= 0) throw new RuntimeException("FileReader: Ошибка входных параметров: " + count);
         this.count = count;
 
-        try(BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(path))){
-            List<String> lines = new ArrayList<>();
-            String line;
-            while((line = bufferedReader.readLine()) != null) {
-                if(i++ >= count)
-                    break;
-                lines.add(line);
-            }
-            _lines = lines.toArray(new String[0]);
-        }catch(IOException e){
-            throw new RuntimeException("FileReader: Ошибка чтения файла: " + path, e);
+        try {
+            _bufferedReader = new BufferedReader(new java.io.FileReader(path));
+            readLine();
+        } catch (IOException e) {
+            throw new RuntimeException("FileReader: Файл не найден: " + path, e);
         }
-
-        readLine();
     }
 
-    private void readLine(){
-        if(_index < _lines.length)
-            _nextLine = _lines[_index++];
-        else
-            _nextLine = null;
+    private void readLine() {
+        try {
+            if(i++ >= count){
+                _nextLine = null;
+                _bufferedReader.close();
+                return;
+            }
+            _nextLine = _bufferedReader.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException("FileReader: Ошибка чтения файла");
+        }
     }
 
     @Override
