@@ -23,14 +23,13 @@ public class SearchAsync implements SearchInterface {
     }
 
     public SearchAsync(List<UserABC> list) {
-        logger.info(String.valueOf(Runtime.getRuntime().availableProcessors()));
         userList = list;
         threadCount = calculator(list.size());
     }
 
     @Override
     public int matchesCount(String text) {
-        if (text == null || text.isEmpty()) return 0;
+        if (text == null || text.isEmpty() || userList.isEmpty()) return 0;
         int count = 0;
 
         try (ExecutorService executor = Executors.newFixedThreadPool(threadCount)) {
