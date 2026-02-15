@@ -57,4 +57,13 @@ class FileReaderTest {
         String[] lines = di.stream().toArray(String[]::new);
         assertEquals(186, lines.length);
     }
+
+    @Test
+    void ResultEquals(){
+        // Сравнить с первой строкой: john_doe, 123456, john.doe@gmail.com
+        //BUILD SUCCESSFUL
+        DataInterface di = new FileReader(path);
+        String line = di.next();
+        assertEquals("john_doe, 123456, john.doe@gmail.com", line);
+    }
 }

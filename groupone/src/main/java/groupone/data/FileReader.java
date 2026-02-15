@@ -22,7 +22,7 @@ public class FileReader extends DataABC {
             _bufferedReader = new BufferedReader(new java.io.FileReader(path));
             readLine();
         } catch (IOException e) {
-            throw new RuntimeException("FileReader: Файл не найден: " + path, e);
+            throw new RuntimeException("FileReader: Ошибка чтения файла: " + path, e);
         }
     }
 
@@ -44,7 +44,7 @@ public class FileReader extends DataABC {
                 finish = true;
             }
         } catch (IOException e) {
-            throw new RuntimeException("FileReader: Ошибка чтения файла");
+            throw new RuntimeException("FileReader: Ошибка чтения файла", e);
         }
     }
 
