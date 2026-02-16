@@ -9,16 +9,16 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class.getName());
     private static final Scanner scanner = new Scanner(System.in);
 
     private static List<User> users = new ArrayList<>();
-
     private static final SortContext sortContext = new SortContext();
-
     private static final CustomFileWriter fileWriter = new UserFileWriter();
 
     public static void main(String[] args) {
@@ -58,7 +58,6 @@ public class Main {
         System.out.println("8. Выход");
     }
 
-    // ---------- Заполнение коллекции ----------
     private static void fillCollection() {
         System.out.println("\n--- Заполнение коллекции ---");
         System.out.println("Выберите источник данных:");
@@ -82,7 +81,20 @@ public class Main {
             default -> throw new IllegalStateException("Недопустимый источник");
         };
 
-        List<User> newUsers = readUsersFromReader(reader);
+        List<User> newUsers = reader.stream()
+                .map(item -> {
+                    try {
+                        return new User.Builder().setLine(item).build();
+                    } catch (Exception e) {
+                        System.out.println("Ошибка парсинга строки: " + item + " - " + e.getMessage());
+                        logger.error("Ошибка парсинга: {} - {}", item, e.getMessage());
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .filter(UserABC::isValid)
+                .collect(Collectors.toList());
+
         if (!newUsers.isEmpty()) {
             if (!users.isEmpty()) {
                 System.out.print("Коллекция не пуста. Добавить новые записи к существующим? (1 - да, 2 - заменить): ");
@@ -100,44 +112,9 @@ public class Main {
             }
             System.out.println("Коллекция обновлена. Текущий размер: " + users.size());
         } else {
-            System.out.println("Не удалось добавить записи.");
+            System.out.println("Не удалось добавить записи (все строки оказались невалидными).");
             logger.warn("Не удалось прочитать данные из выбранного источника.");
         }
-    }
-
-    private static List<User> readUsersFromReader(DataABC reader) {
-        List<User> result = new ArrayList<>();
-        for (String line : reader) {
-            try {
-                User user = parseUser(line);
-                if (user.isValid()) {
-                    result.add(user);
-                } else {
-                    System.out.println("Пропущена некорректная строка: " + line);
-                    logger.warn("Некорректные данные: {}", line);
-                }
-            } catch (Exception e) {
-                System.out.println("Ошибка парсинга строки: " + line + " - " + e.getMessage());
-                logger.error("Ошибка парсинга: {} - {}", line, e.getMessage());
-            }
-        }
-        return result;
-    }
-
-    private static User parseUser(String line) {
-        String[] parts = line.split(", ");
-        if (parts.length != 3) {
-            throw new IllegalArgumentException("Строка должна содержать три поля, разделённых ', '");
-        }
-        String username = parts[0].trim();
-        int password;
-        try {
-            password = Integer.parseInt(parts[1].trim());
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Пароль должен быть целым числом");
-        }
-        String email = parts[2].trim();
-        return new User(username, password, email);
     }
 
     private static void showCollection() {
@@ -151,7 +128,6 @@ public class Main {
         }
     }
 
-    // ---------- Выбор стратегии сортировки ----------
     private static void chooseSortingStrategy() {
         System.out.println("\n--- Выбор стратегии сортировки ---");
         System.out.println("1. Обычная сортировка (по одному из полей)");
@@ -181,7 +157,6 @@ public class Main {
         }
     }
 
-    // ---------- Сортировка ----------
     private static void sortCollection() {
         if (users.isEmpty()) {
             System.out.println("Коллекция пуста. Нечего сортировать.");
@@ -216,7 +191,6 @@ public class Main {
             System.out.println("Подстрока не может быть пустой.");
             return;
         }
-        // Создаём список типа List<UserABC> для передачи в SearchAsync (без изменения самого SearchAsync)
         List<UserABC> abcList = new ArrayList<>(users);
         SearchAsync searcher = new SearchAsync(abcList);
         int count = searcher.matchesCount(text);
