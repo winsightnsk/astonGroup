@@ -33,7 +33,7 @@ public abstract class UserABC {
 
     @Override
     public String toString() {
-        return "Имя: " + username + ", Пароль: " + password + ", Почта: " + email;
+        return String.join(", ", username, String.valueOf(password), email);
     }
 
 }
