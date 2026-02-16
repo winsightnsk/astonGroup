@@ -11,37 +11,42 @@ class FileReaderTest {
     @Test
     void allRead(){
         // в файле: 186 строк
-        // результат: выводит все 186 строк
+        // результат: получает все 186 строк
         //BUILD SUCCESSFUL
-        new FileReader(path).forEach(System.out::println);
+        int count = (int)new FileReader(path).stream().count();
+        assertEquals(186, count);
     }
 
     @Test
     void readCount500(){
         // в файле: 186 строк
-        // результат: выводит 186 строк
+        // результат: получает 186 строк
         //BUILD SUCCESSFUL
-        new FileReader(500, path).forEach(System.out::println);
+        int count = (int)new FileReader(500, path).stream().count();
+        assertEquals(186, count);
     }
 
     @Test
     void readCount10(){
         // в файле: 186 строк
-        // результат: выводит 10 строк
+        // результат: получает 10 строк
         //BUILD SUCCESSFUL
-        new FileReader(10, path).forEach(System.out::println);
+        int count = (int)new FileReader(10, path).stream().count();
+        assertEquals(10, count);
     }
 
     @Test
     void readCount186(){
         // в файле: 186 строк
-        // результат: выводит 186 строк
+        // результат: получает 186 строк
         //BUILD SUCCESSFUL
-        new FileReader(186, path).forEach(System.out::println);
+        int count = (int)new FileReader(186, path).stream().count();
+        assertEquals(186, count);
     }
 
     @Test
     void testEqualsCount5(){
+        // в файле: 186 строк
         // получить 5 строк
         //BUILD SUCCESSFUL
         DataInterface di = new FileReader(5, path);
@@ -51,6 +56,7 @@ class FileReaderTest {
 
     @Test
     void testEqualsCountAll(){
+        // в файле: 186 строк
         // получить все строки
         //BUILD SUCCESSFUL
         DataInterface di = new FileReader(path);
