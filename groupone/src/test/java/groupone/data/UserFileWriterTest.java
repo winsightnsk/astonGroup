@@ -1,6 +1,7 @@
 package groupone.data;
 
 import groupone.model.User;
+import groupone.model.UserABC;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -13,8 +14,7 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
-class CustomFileWriterTest {
-    private static final String SEPARATOR = ", ";
+class UserFileWriterTest {
     private static final String FILENAME = "testOutput.txt";
     private static final int SIZE = 50;
 
@@ -43,11 +43,12 @@ class CustomFileWriterTest {
         di.forEach(item -> users.add(new User.Builder().setLine(item).build()));
 
         List<String> expectedLines = users.stream()
-                .map(user -> String.join(SEPARATOR, user.getUsername(), String.valueOf(user.getPassword()), user.getEmail()))
+                .map(UserABC::toString)
                 .toList();
 
+        CustomFileWriter writer = new UserFileWriter();
         Path outputFile = TEMP_DIR.resolve(FILENAME);
-        CustomFileWriter.appendWrite(users, outputFile.toString());
+        writer.appendWrite(users, outputFile.toString());
 
         Assertions.assertTrue(Files.exists(outputFile));
 
