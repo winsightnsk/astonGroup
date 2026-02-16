@@ -1,7 +1,9 @@
 package groupone;
 
 import groupone.data.*;
+import groupone.domain.*;
 import groupone.model.User;
+import groupone.model.UserABC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +17,7 @@ public class Main {
 
     private static List<User> users = new ArrayList<>();
 
-    private static String currentStrategy = "InsertionSort";
+    private static final SortContext sortContext = new SortContext();
 
     private static final CustomFileWriter fileWriter = new UserFileWriter();
 
@@ -51,11 +53,12 @@ public class Main {
         System.out.println("3. Выбрать стратегию сортировки");
         System.out.println("4. Отсортировать коллекцию");
         System.out.println("5. Сохранить коллекцию в файл");
-        System.out.println("6. Подсчитать вхождения элемента");
+        System.out.println("6. Подсчитать вхождения подстроки в именах");
         System.out.println("7. Очистить коллекцию");
         System.out.println("8. Выход");
     }
 
+    // ---------- Заполнение коллекции ----------
     private static void fillCollection() {
         System.out.println("\n--- Заполнение коллекции ---");
         System.out.println("Выберите источник данных:");
@@ -134,7 +137,7 @@ public class Main {
             throw new IllegalArgumentException("Пароль должен быть целым числом");
         }
         String email = parts[2].trim();
-        return new User(username, password, email); // предполагается конструктор
+        return new User(username, password, email);
     }
 
     private static void showCollection() {
@@ -148,24 +151,45 @@ public class Main {
         }
     }
 
+    // ---------- Выбор стратегии сортировки ----------
     private static void chooseSortingStrategy() {
         System.out.println("\n--- Выбор стратегии сортировки ---");
-        System.out.println("1. Обычная сортировка (вставками)");
-        System.out.println("2. Сортировка только чётных значений (по числовому полю)");
+        System.out.println("1. Обычная сортировка (по одному из полей)");
+        System.out.println("2. Сортировка только чётных значений (по паролю)");
         int strat = readInt("Выберите стратегию: ", 2);
-        currentStrategy = (strat == 1) ? "InsertionSort" : "EvenOddSort";
-        System.out.println("Стратегия '" + currentStrategy + "' выбрана (реализация будет добавлена позже).");
-        logger.info("Выбрана стратегия: {}", currentStrategy);
+
+        if (strat == 1) {
+            System.out.println("Выберите поле для сортировки:");
+            System.out.println("1. По имени");
+            System.out.println("2. По паролю (числовое поле)");
+            System.out.println("3. По email");
+            int field = readInt("Ваш выбор: ", 3);
+
+            SortStrategy strategy = switch (field) {
+                case 1 -> new SortByUsernameStrategy();
+                case 2 -> new SortByPasswordStrategy();
+                case 3 -> new SortByEmailStrategy();
+                default -> throw new IllegalStateException("Unexpected value");
+            };
+            sortContext.setSortStrategy(strategy);
+            System.out.println("Стратегия обычной сортировки установлена.");
+            logger.info("Установлена стратегия обычной сортировки по полю {}", field);
+        } else {
+            sortContext.setSortStrategy(new SortByPasswordAltStrategy());
+            System.out.println("Стратегия сортировки только чётных значений (по паролю) установлена.");
+            logger.info("Установлена стратегия EvenOddSortStrategy");
+        }
     }
 
+    // ---------- Сортировка ----------
     private static void sortCollection() {
         if (users.isEmpty()) {
             System.out.println("Коллекция пуста. Нечего сортировать.");
             return;
         }
-        System.out.println("\n--- Сортировка ---");
-        System.out.println("Функция сортировки находится в разработке.");
-        System.out.println("Выбранная стратегия: " + currentStrategy);
+        sortContext.sort(users);
+        System.out.println("Коллекция отсортирована.");
+        logger.info("Выполнена сортировка с текущей стратегией.");
     }
 
     private static void saveToFile() {
@@ -186,20 +210,18 @@ public class Main {
             System.out.println("Коллекция пуста.");
             return;
         }
-        System.out.println("Введите данные пользователя для подсчёта (в формате: имя, пароль, email):");
-        String line = scanner.nextLine().trim();
-        try {
-            User target = parseUser(line);
-            int count = 0;
-            for (User u : users) {
-                if (u.equals(target)) count++;
-            }
-            System.out.println("Количество вхождений: " + count);
-            logger.debug("Подсчёт вхождений для {}: {}", target, count);
-        } catch (Exception e) {
-            System.out.println("Ошибка в формате: " + e.getMessage());
-            logger.error("Ошибка парсинга целевого элемента: {}", e.getMessage());
+        System.out.print("Введите подстроку для поиска в именах: ");
+        String text = scanner.nextLine().trim();
+        if (text.isEmpty()) {
+            System.out.println("Подстрока не может быть пустой.");
+            return;
         }
+        // Создаём список типа List<UserABC> для передачи в SearchAsync (без изменения самого SearchAsync)
+        List<UserABC> abcList = new ArrayList<>(users);
+        SearchAsync searcher = new SearchAsync(abcList);
+        int count = searcher.matchesCount(text);
+        System.out.println("Количество пользователей, в имени которых встречается \"" + text + "\": " + count);
+        logger.debug("Поиск подстроки '{}' дал {} результатов.", text, count);
     }
 
     private static void clearCollection() {
