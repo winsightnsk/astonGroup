@@ -1,6 +1,5 @@
 package groupone.data;
 
-import groupone.model.User;
 import groupone.model.UserABC;
 
 import java.util.List;

@@ -1,6 +1,5 @@
 package groupone.data;
 
-import groupone.model.User;
 import groupone.model.UserABC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
