@@ -77,16 +77,7 @@ public class Main {
         };
 
         List<User> newUsers = reader.stream()
-                .map(item -> {
-                    try {
-                        return new User.Builder().setLine(item).build();
-                    } catch (Exception e) {
-                        System.out.println("Ошибка парсинга строки: " + item + " - " + e.getMessage());
-                        logger.error("Ошибка парсинга: {} - {}", item, e.getMessage());
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
+                .map(item -> new User.Builder().setLine(item).build())
                 .filter(UserABC::isValid)
                 .collect(Collectors.toList());
 
