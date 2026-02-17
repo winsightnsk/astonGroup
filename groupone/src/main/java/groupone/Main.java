@@ -72,6 +72,7 @@ public class Main {
         DataInterface reader = switch (source) {
             case 1 -> new ConsoleReader(count, scanner);
             case 2 -> new RandomGenerator(count);
+            case 3 -> new FileReader(count, readString("Имя файла: "));
             default -> throw new IllegalStateException("Недопустимый источник");
         };
 
@@ -207,4 +208,10 @@ public class Main {
             }
         }
     }
+
+    private static String readString(String txt) {
+        System.out.print(txt);
+        return scanner.nextLine();
+    }
+
 }

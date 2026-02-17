@@ -4,8 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
 
+import groupone.Main;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class FileReader extends DataABC {
-    private final BufferedReader _bufferedReader;
+
+    private static final Logger logger = LoggerFactory.getLogger(FileReader.class.getName());
+    private BufferedReader _bufferedReader = null;
     private String _nextLine;
     private boolean finish = false;
 
@@ -22,7 +28,10 @@ public class FileReader extends DataABC {
             _bufferedReader = new BufferedReader(new java.io.FileReader(path));
             readLine();
         } catch (IOException e) {
-            throw new RuntimeException("FileReader: Ошибка чтения файла: " + path, e);
+            _nextLine = null;
+            finish = true;
+            logger.info("Текущий рабочий каталог: {}", System.getProperty("user.dir"));
+            logger.error("FileReader: Ошибка чтения файла '{}': {}", path, e.getMessage());
         }
     }
 
