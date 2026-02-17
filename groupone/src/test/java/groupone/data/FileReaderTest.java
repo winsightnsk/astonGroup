@@ -65,11 +65,16 @@ class FileReaderTest {
     }
 
     @Test
-    void ResultEquals(){
+    void resultEquals(){
         // Сравнить с первой строкой: john_doe, 123456, john.doe@gmail.com
         //BUILD SUCCESSFUL
         DataInterface di = new FileReader(path);
         String line = di.next();
         assertEquals("john_doe, 123456, john.doe@gmail.com", line);
+    }
+
+    @Test
+    void testPath(){
+        new FileReader("users.txt").forEach(System.out::println);
     }
 }
