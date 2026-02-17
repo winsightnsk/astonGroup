@@ -14,7 +14,7 @@ public class FileReader extends DataABC {
     private String _nextLine;
     private boolean finish = false;
 
-    public FileReader(String path){
+    public FileReader(String path) {
         this(-1, path);
     }
 
@@ -35,21 +35,20 @@ public class FileReader extends DataABC {
         }
     }
 
-
     private void readLine() {
-        if(finish)
+        if (finish)
             return;
 
         try {
-            if(count != -1)
-                if(i++ >= count){
+            if (count != -1)
+                if (i++ >= count) {
                     _nextLine = null;
                     _bufferedReader.close();
                     finish = true;
                     return;
                 }
             _nextLine = _bufferedReader.readLine();
-            if(_nextLine == null){
+            if (_nextLine == null) {
                 _bufferedReader.close();
                 finish = true;
             }
