@@ -31,12 +31,11 @@ public class Main {
             switch (choice) {
                 case 1 -> fillCollection();
                 case 2 -> showCollection();
-                case 3 -> chooseSortingStrategy();
-                case 4 -> sortCollection();
-                case 5 -> saveToFile();
-                case 6 -> countOccurrences();
-                case 7 -> clearCollection();
-                case 8 -> {
+                case 3 -> sortCollection();
+                case 4 -> saveToFile();
+                case 5 -> countOccurrences();
+                case 6 -> clearCollection();
+                case 7 -> {
                     exit = true;
                     logger.info("Выход из приложения.");
                 }
@@ -50,12 +49,11 @@ public class Main {
         System.out.println("\n=== ГЛАВНОЕ МЕНЮ ===");
         System.out.println("1. Заполнить коллекцию");
         System.out.println("2. Показать коллекцию");
-        System.out.println("3. Выбрать стратегию сортировки");
-        System.out.println("4. Отсортировать коллекцию");
-        System.out.println("5. Сохранить коллекцию в файл");
-        System.out.println("6. Подсчитать вхождения подстроки в именах");
-        System.out.println("7. Очистить коллекцию");
-        System.out.println("8. Выход");
+        System.out.println("3. Отсортировать коллекцию");
+        System.out.println("4. Сохранить коллекцию в файл");
+        System.out.println("5. Подсчитать вхождения подстроки в именах");
+        System.out.println("6. Очистить коллекцию");
+        System.out.println("7. Выход");
     }
 
     private static void fillCollection() {
@@ -115,32 +113,21 @@ public class Main {
     }
 
     private static void chooseSortingStrategy() {
-        System.out.println("\n--- Выбор стратегии сортировки ---");
-        System.out.println("1. Обычная сортировка (по одному из полей)");
-        System.out.println("2. Сортировка только чётных значений (по паролю)");
-        int strat = readInt("Выберите стратегию: ", 2);
-
-        if (strat == 1) {
-            System.out.println("Выберите поле для сортировки:");
-            System.out.println("1. По имени");
-            System.out.println("2. По паролю (числовое поле)");
-            System.out.println("3. По email");
-            int field = readInt("Ваш выбор: ", 3);
-
-            SortStrategy strategy = switch (field) {
-                case 1 -> new SortByUsernameStrategy();
-                case 2 -> new SortByPasswordStrategy();
-                case 3 -> new SortByEmailStrategy();
-                default -> throw new IllegalStateException("Unexpected value");
-            };
-            sortContext.setSortStrategy(strategy);
-            System.out.println("Стратегия обычной сортировки установлена.");
-            logger.info("Установлена стратегия обычной сортировки по полю {}", field);
-        } else {
-            sortContext.setSortStrategy(new SortByPasswordAltStrategy());
-            System.out.println("Стратегия сортировки только чётных значений (по паролю) установлена.");
-            logger.info("Установлена стратегия EvenOddSortStrategy");
-        }
+        System.out.println("Выберите поле для сортировки:");
+        System.out.println("1. По имени");
+        System.out.println("2. По паролю (числовое поле)");
+        System.out.println("3. По email");
+        System.out.println("4. По паролю (только чётные значения)");
+        int field = readInt("Ваш выбор: ", 3);
+        SortStrategy strategy = switch (field) {
+            case 1 -> new SortByUsernameStrategy();
+            case 2 -> new SortByPasswordStrategy();
+            case 3 -> new SortByEmailStrategy();
+            case 4 -> new SortByPasswordAltStrategy();
+            default -> throw new IllegalStateException("Unexpected value");
+        };
+        sortContext.setSortStrategy(strategy);
+        logger.info("Установлена стратегия сортировки по полю {}", field);
     }
 
     private static void sortCollection() {
@@ -148,6 +135,9 @@ public class Main {
             System.out.println("Коллекция пуста. Нечего сортировать.");
             return;
         }
+
+        chooseSortingStrategy();
+
         sortContext.sort(users);
         System.out.println("Коллекция отсортирована.");
         logger.info("Выполнена сортировка с текущей стратегией.");
