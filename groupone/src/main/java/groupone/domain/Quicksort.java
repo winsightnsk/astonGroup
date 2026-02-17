@@ -1,6 +1,5 @@
 package groupone.domain;
 
-import groupone.model.User;
 import groupone.model.UserABC;
 
 import java.util.Comparator;
@@ -8,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Quicksort {
-    public static void quicksort(List<User> list, Comparator<User> comp, int start, int end) {
+    public static void quicksort(List<UserABC> list, Comparator<UserABC> comp, int start, int end) {
         if (start < end) {
             int pivotIndex = partition(list, comp, start, end);
 
@@ -17,8 +16,8 @@ public class Quicksort {
         }
     }
 
-    private static int partition(List<User> list, Comparator<User> comp, int start, int end) {
-        User pivot = list.get(end);
+    private static int partition(List<UserABC> list, Comparator<UserABC> comp, int start, int end) {
+        UserABC pivot = list.get(end);
 
         int i = start - 1;
         for (int j = start; j < end; j++) {
@@ -33,15 +32,15 @@ public class Quicksort {
         return (i + 1);
     }
 
-    private static void swap(List<User> list, int x, int y) {
-        User user = list.get(x);
+    private static void swap(List<UserABC> list, int x, int y) {
+        UserABC user = list.get(x);
         list.set(x, list.get(y));
         list.set(y, user);
     }
 
-    public static void altSort(List<User> list) {
-        List<User> targetUsers = new LinkedList<>();
-        for (User user : list) {
+    public static void altSort(List<UserABC> list) {
+        List<UserABC> targetUsers = new LinkedList<>();
+        for (UserABC user : list) {
             if (user.getPassword() % 2 == 0)
                 targetUsers.add((user));
         }

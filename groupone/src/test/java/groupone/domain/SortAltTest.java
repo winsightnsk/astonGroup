@@ -3,6 +3,7 @@ package groupone.domain;
 import groupone.data.DataInterface;
 import groupone.data.RandomGenerator;
 import groupone.model.User;
+import groupone.model.UserABC;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SortAltTest {
-    public static List<Integer> odds(List<User> list) {
+    public static List<Integer> odds(List<UserABC> list) {
         // Сохраняем в список индексы нечётных элементов
         List<Integer> odds = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
@@ -22,7 +23,7 @@ public class SortAltTest {
         return odds;
     }
 
-    public static boolean isEvenSorted(List<User> list, List<Integer> odds) {
+    public static boolean isEvenSorted(List<UserABC> list, List<Integer> odds) {
         /* Проверяем, что отсортированы только чётные элементы:
          * смотрим на пару с индексами i, j. Если i-й элемент нечётный, то двигаемся до ближайшего чётного.
          * Сравниваем с j-м элементом, начиная с j = i + 1.
@@ -57,7 +58,7 @@ public class SortAltTest {
 
     @Test
     void firstExtra() {
-        LinkedList<User> users = new LinkedList<>();
+        LinkedList<UserABC> users = new LinkedList<>();
         DataInterface di = new RandomGenerator(50);
         di.forEach(item -> users.add(new User.Builder().setLine(item).build()));
 

@@ -30,7 +30,7 @@ public class User extends UserABC {
             }
             return this;
         }
-        public User build() { return new  User(username, password, email); }
+        public UserABC build() { return new User(username, password, email); }
     }
 
 }

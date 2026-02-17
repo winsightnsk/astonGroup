@@ -1,6 +1,6 @@
 package groupone.domain;
 
-import groupone.model.User;
+import groupone.model.UserABC;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class SortContext implements SortInterface{
     }
 
     @Override
-    public void sort(List<User> list) {
+    public void sort(List<UserABC> list) {
         sortStrategy.sort(list);
     }
 }
