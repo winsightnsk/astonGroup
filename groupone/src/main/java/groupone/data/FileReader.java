@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
 
-import groupone.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,13 +26,15 @@ public class FileReader extends DataABC {
         try {
             _bufferedReader = new BufferedReader(new java.io.FileReader(path));
             readLine();
-        } catch (IOException e) {
+        } catch (IOException ex) {
+            System.out.println("Файл не найден.");
             _nextLine = null;
             finish = true;
-            logger.info("Текущий рабочий каталог: {}", System.getProperty("user.dir"));
-            logger.error("FileReader: Ошибка чтения файла '{}': {}", path, e.getMessage());
+            logger.error("Текущий рабочий каталог: {}", System.getProperty("user.dir"));
+            logger.error("Ошибка доступа к {}: {}", path, ex.getMessage());
         }
     }
+
 
     private void readLine() {
         if(finish)
