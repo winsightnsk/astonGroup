@@ -1,9 +1,9 @@
 package groupone.domain;
 
-import groupone.model.User;
+import groupone.model.UserABC;
 
 import java.util.List;
 
 public interface SortStrategy {
-    void sort(List<User> list);
+    void sort(List<UserABC> list);
 }

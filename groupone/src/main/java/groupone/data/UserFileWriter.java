@@ -1,6 +1,7 @@
 package groupone.data;
 
 import groupone.model.User;
+import groupone.model.UserABC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,9 +14,9 @@ public class UserFileWriter implements CustomFileWriter{
     private static final Logger logger = LoggerFactory.getLogger(UserFileWriter.class.getName());
 
     @Override
-    public void appendWrite(List<User> users, String path) {
+    public void appendWrite(List<UserABC> users, String path) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path, true))) {
-            for (User user : users) {
+            for (UserABC user : users) {
                 writer.write(user.toString() + '\n');
             }
         } catch (IOException e) {

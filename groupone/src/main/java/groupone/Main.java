@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -17,7 +16,7 @@ public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class.getName());
     private static final Scanner scanner = new Scanner(System.in);
 
-    private static List<User> users = new ArrayList<>();
+    private static List<UserABC> users = new ArrayList<>();
 
     private static final SortInterface sortContext = new SortContext();
     private static final CustomFileWriter fileWriter = new UserFileWriter();
@@ -76,7 +75,7 @@ public class Main {
             default -> throw new IllegalStateException("Недопустимый источник");
         };
 
-        List<User> newUsers = reader.stream()
+        List<UserABC> newUsers = reader.stream()
                 .map(item -> new User.Builder().setLine(item).build())
                 .filter(UserABC::isValid)
                 .collect(Collectors.toList());

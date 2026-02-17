@@ -10,7 +10,7 @@ class TesterTest {
 
     @Test
     void testBuilder() {
-        User user = new User.Builder()
+        UserABC user = new User.Builder()
                 .setUsername(" Иван Иванович ")
                 .setPassword(123)
                 .setEmail("ivan.ivan@mail.ru ")

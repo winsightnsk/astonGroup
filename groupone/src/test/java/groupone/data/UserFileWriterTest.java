@@ -38,7 +38,7 @@ class UserFileWriterTest {
 
     @Test
     void appendWriteTest() throws IOException {
-        LinkedList<User> users = new LinkedList<>();
+        LinkedList<UserABC> users = new LinkedList<>();
         DataInterface di = new RandomGenerator(SIZE);
         di.forEach(item -> users.add(new User.Builder().setLine(item).build()));
 
