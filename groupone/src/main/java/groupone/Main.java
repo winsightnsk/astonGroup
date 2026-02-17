@@ -18,7 +18,8 @@ public class Main {
     private static final Scanner scanner = new Scanner(System.in);
 
     private static List<User> users = new ArrayList<>();
-    private static final SortContext SortInterface = new SortContext();
+
+    private static final SortInterface sortContext = new SortContext();
     private static final CustomFileWriter fileWriter = new UserFileWriter();
 
     public static void main(String[] args) {
@@ -141,11 +142,11 @@ public class Main {
                 case 3 -> new SortByEmailStrategy();
                 default -> throw new IllegalStateException("Unexpected value");
             };
-            SortInterface.setSortStrategy(strategy);
+            sortContext.setSortStrategy(strategy);
             System.out.println("Стратегия обычной сортировки установлена.");
             logger.info("Установлена стратегия обычной сортировки по полю {}", field);
         } else {
-            SortInterface.setSortStrategy(new SortByPasswordAltStrategy());
+            sortContext.setSortStrategy(new SortByPasswordAltStrategy());
             System.out.println("Стратегия сортировки только чётных значений (по паролю) установлена.");
             logger.info("Установлена стратегия EvenOddSortStrategy");
         }
@@ -156,7 +157,7 @@ public class Main {
             System.out.println("Коллекция пуста. Нечего сортировать.");
             return;
         }
-        SortInterface.sort(users);
+        sortContext.sort(users);
         System.out.println("Коллекция отсортирована.");
         logger.info("Выполнена сортировка с текущей стратегией.");
     }
