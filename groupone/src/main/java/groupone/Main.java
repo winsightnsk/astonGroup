@@ -18,7 +18,7 @@ public class Main {
     private static final Scanner scanner = new Scanner(System.in);
 
     private static List<User> users = new ArrayList<>();
-    private static final SortContext sortContext = new SortContext();
+    private static final SortContext SortInterface = new SortContext();
     private static final CustomFileWriter fileWriter = new UserFileWriter();
 
     public static void main(String[] args) {
@@ -61,23 +61,17 @@ public class Main {
     private static void fillCollection() {
         System.out.println("\n--- Заполнение коллекции ---");
         System.out.println("Выберите источник данных:");
-        System.out.println("1. Ручной ввод (ConsoleReader)");
-        System.out.println("2. Случайная генерация (RandomGenerator)");
-        System.out.println("3. Чтение из файла (FileReader)");
+        System.out.println("1. Ручной ввод ");
+        System.out.println("2. Случайная генерация");
+        System.out.println("3. Чтение из файла");
         int source = readInt("Ваш выбор: ", 3);
 
         System.out.print("Сколько записей добавить? ");
         int count = readInt("", Integer.MAX_VALUE);
 
-        DataABC reader = switch (source) {
+        DataInterface reader = switch (source) {
             case 1 -> new ConsoleReader(count, scanner);
             case 2 -> new RandomGenerator(count);
-            case 3 -> {
-                System.out.print("Введите имя файла (по умолчанию input.txt): ");
-                String fileName = scanner.nextLine().trim();
-                if (fileName.isEmpty()) fileName = "input.txt";
-                yield new FileReader(count, fileName);
-            }
             default -> throw new IllegalStateException("Недопустимый источник");
         };
 
@@ -147,11 +141,11 @@ public class Main {
                 case 3 -> new SortByEmailStrategy();
                 default -> throw new IllegalStateException("Unexpected value");
             };
-            sortContext.setSortStrategy(strategy);
+            SortInterface.setSortStrategy(strategy);
             System.out.println("Стратегия обычной сортировки установлена.");
             logger.info("Установлена стратегия обычной сортировки по полю {}", field);
         } else {
-            sortContext.setSortStrategy(new SortByPasswordAltStrategy());
+            SortInterface.setSortStrategy(new SortByPasswordAltStrategy());
             System.out.println("Стратегия сортировки только чётных значений (по паролю) установлена.");
             logger.info("Установлена стратегия EvenOddSortStrategy");
         }
@@ -162,7 +156,7 @@ public class Main {
             System.out.println("Коллекция пуста. Нечего сортировать.");
             return;
         }
-        sortContext.sort(users);
+        SortInterface.sort(users);
         System.out.println("Коллекция отсортирована.");
         logger.info("Выполнена сортировка с текущей стратегией.");
     }
@@ -192,7 +186,7 @@ public class Main {
             return;
         }
         List<UserABC> abcList = new ArrayList<>(users);
-        SearchAsync searcher = new SearchAsync(abcList);
+        SearchInterface searcher = new SearchAsync(abcList);
         int count = searcher.matchesCount(text);
         System.out.println("Количество пользователей, в имени которых встречается \"" + text + "\": " + count);
         logger.debug("Поиск подстроки '{}' дал {} результатов.", text, count);
