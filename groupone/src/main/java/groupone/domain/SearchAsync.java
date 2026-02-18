@@ -16,9 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class SearchAsync implements SearchInterface {
 
     private static final Logger logger = LoggerFactory.getLogger(SearchAsync.class.getName());
-
     private static final Lock lock = new ReentrantLock();
-    private static int count;
 
     private final int threadCount;
     private final List<UserABC> userList;
@@ -26,9 +24,7 @@ public class SearchAsync implements SearchInterface {
     private final List<UserABC> found = new ArrayList<>();
 
     @Override
-    public List<UserABC> getFound() {
-        return found;
-    }
+    public List<UserABC> getFound() { return found; }
 
     private int calculator(int n) {
         return Math.min(n, Runtime.getRuntime().availableProcessors());
@@ -42,7 +38,6 @@ public class SearchAsync implements SearchInterface {
     @Override
     public int matches(String text) {
         if (text == null || text.isEmpty() || userList.isEmpty()) return 0;
-        count = 0;
 
         try (ExecutorService executor = Executors.newFixedThreadPool(threadCount)) {
             int part = userList.size() / threadCount;
@@ -58,7 +53,7 @@ public class SearchAsync implements SearchInterface {
         } catch (Exception e) {
             logger.error(String.valueOf(e));
         }
-        return count;
+        return found.size();
     }
 
     static class Finder implements Runnable {
@@ -82,7 +77,6 @@ public class SearchAsync implements SearchInterface {
                 if (userList.get(i).getUsername().toLowerCase().contains(txt.toLowerCase())) {
                     lock.lock();
                     found.add(userList.get(i));
-                    count++;
                     lock.unlock();
                 }
         }
