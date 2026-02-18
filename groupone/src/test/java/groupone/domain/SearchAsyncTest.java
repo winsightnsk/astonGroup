@@ -1,5 +1,7 @@
 package groupone.domain;
 
+import groupone.data.DataInterface;
+import groupone.data.RandomGenerator;
 import groupone.model.User;
 import groupone.model.UserABC;
 import org.junit.jupiter.api.Test;
@@ -57,6 +59,16 @@ class SearchAsyncTest {
         assertEquals(1, (new SearchAsync(list)).matches("КузнЕцов"));
         assertEquals(1, (new SearchAsync(list)).matches("Васильева Елена Александровна"));
         assertEquals(6, (new SearchAsync(list)).matches("ЕЕ"));
+    }
+
+    @Test
+    void matches2() {
+        List<UserABC> list = new ArrayList<>();
+        DataInterface di = new RandomGenerator(50000);
+        di.stream().map(item -> new User.Builder().setLine(item).build())
+                .filter(UserABC::isValid)
+                .forEach(list::add);
+        assertTrue((new SearchAsync(list)).matches("a") > 0);
     }
 
 }

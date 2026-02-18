@@ -10,9 +10,14 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class SearchAsync implements SearchInterface {
+
     private static final Logger logger = LoggerFactory.getLogger(SearchAsync.class.getName());
+
+    private static final Lock lock = new ReentrantLock();
 
     private final int threadCount;
     private final List<UserABC> userList;
@@ -80,13 +85,14 @@ public class SearchAsync implements SearchInterface {
         }
 
         @Override
-        public Integer call() throws Exception {
-            for (int i = origin; i < bound; i++) {
+        public Integer call() {
+            for (int i = origin; i < bound; i++)
                 if (userList.get(i).getUsername().toLowerCase().contains(txt.toLowerCase())) {
+                    lock.lock();
                     found.add(userList.get(i));
                     count++;
+                    lock.unlock();
                 }
-            }
             return count;
         }
     }
