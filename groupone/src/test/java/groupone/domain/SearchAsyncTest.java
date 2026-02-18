@@ -64,7 +64,7 @@ class SearchAsyncTest {
     @Test
     void matches2() {
         List<UserABC> list = new ArrayList<>();
-        DataInterface di = new RandomGenerator(50000);
+        DataInterface di = new RandomGenerator(999999);
         di.stream().map(item -> new User.Builder().setLine(item).build())
                 .filter(UserABC::isValid)
                 .forEach(list::add);
