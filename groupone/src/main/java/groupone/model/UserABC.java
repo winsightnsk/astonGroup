@@ -1,6 +1,12 @@
 package groupone.model;
 
+import groupone.Main;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class UserABC {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserABC.class.getName());
 
     protected String username;
     protected int password;
@@ -25,10 +31,19 @@ public abstract class UserABC {
      * @return True если всё хорошо
      */
     public boolean isValid() {
-        if (username == null || email == null) { return false; }
-        return (username.matches("^([a-zA-Zа-яА-Я]+(\\s[a-zA-Zа-яА-Я]+)*)$")
+        if (username == null || email == null) {
+            if (username == null) logger.warn("Пустое имя");
+            else logger.warn("пустой емеил");
+            return false;
+        }
+        if (username.matches("^([a-zA-Zа-яА-Я]+(\\s[a-zA-Zа-яА-Я]+)*)$")
                 && password >= 0
-                && email.matches("^([a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+\\.[a-zA-Z]+)$"));
+                && email.matches("^([a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+\\.[a-zA-Z]+)$")) {
+            return true;
+        } else {
+            logger.warn("{} не прошёл валидацию", username);
+            return false;
+        }
     }
 
     @Override
