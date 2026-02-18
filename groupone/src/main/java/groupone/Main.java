@@ -26,13 +26,13 @@ public class Main {
         boolean exit = false;
         while (!exit) {
             printMainMenu();
-            int choice = readInt("Ваш выбор: ", 8);
+            int choice = readInt("Ваш выбор: ", 7);
             logger.debug("Пользователь выбрал пункт: {}", choice);
             switch (choice) {
                 case 1 -> fillCollection();
                 case 2 -> showCollection();
                 case 3 -> sortCollection();
-                case 4 -> saveToFile();
+                case 4 -> saveToFile(users);
                 case 5 -> countOccurrences();
                 case 6 -> clearCollection();
                 case 7 -> {
@@ -118,7 +118,7 @@ public class Main {
         System.out.println("2. По паролю (числовое поле)");
         System.out.println("3. По email");
         System.out.println("4. По паролю (только чётные значения)");
-        int field = readInt("Ваш выбор: ", 3);
+        int field = readInt("Ваш выбор: ", 4);
         SortStrategy strategy = switch (field) {
             case 1 -> new SortByUsernameStrategy();
             case 2 -> new SortByPasswordStrategy();
@@ -143,7 +143,7 @@ public class Main {
         logger.info("Выполнена сортировка с текущей стратегией.");
     }
 
-    private static void saveToFile() {
+    private static void saveToFile(List<UserABC> users) {
         if (users.isEmpty()) {
             System.out.println("Коллекция пуста. Нечего сохранять.");
             return;
@@ -169,8 +169,22 @@ public class Main {
         }
         List<UserABC> abcList = new ArrayList<>(users);
         SearchInterface searcher = new SearchAsync(abcList);
-        int count = searcher.matchesCount(text);
-        System.out.println("Количество пользователей, в имени которых встречается \"" + text + "\": " + count);
+        int count = searcher.matches(text);
+        List<UserABC> found = searcher.getFound();
+        System.out.println("Пользователи, в имени которых встречается \"" + text + "\": " + count);
+
+        if (!found.isEmpty()) {
+            for (UserABC user : found) {
+                System.out.println(user.toString());
+            }
+
+            System.out.println("Записать результаты в файл?\n1. Да\n2. Нет");
+            int condition = readInt("Ваш выбор: ", 2);
+            if (condition == 1) {
+                saveToFile(found);
+            }
+        }
+
         logger.debug("Поиск подстроки '{}' дал {} результатов.", text, count);
     }
 

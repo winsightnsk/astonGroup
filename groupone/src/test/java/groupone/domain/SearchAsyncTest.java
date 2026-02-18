@@ -1,7 +1,5 @@
 package groupone.domain;
 
-import groupone.data.DataInterface;
-import groupone.data.RandomGenerator;
 import groupone.model.User;
 import groupone.model.UserABC;
 import org.junit.jupiter.api.Test;
@@ -15,20 +13,20 @@ import static org.junit.jupiter.api.Assertions.*;
 class SearchAsyncTest {
 
     @Test
-    void matchesCount() {
+    void matches() {
         List<UserABC> list = new ArrayList<>();
-        assertEquals(0, (new SearchAsync(list)).matchesCount("текст"));
-        assertEquals(0, (new SearchAsync(list)).matchesCount(""));
-        assertEquals(0, (new SearchAsync(list)).matchesCount(null));
+        assertEquals(0, (new SearchAsync(list)).matches("текст"));
+        assertEquals(0, (new SearchAsync(list)).matches(""));
+        assertEquals(0, (new SearchAsync(list)).matches(null));
 
         Stream.of("Куприянов Олег Валентинович, 23525, kupri@mail.ru")
                 .map(item -> new User.Builder().setLine(item).build())
                 .filter(UserABC::isValid)
                 .forEach(list::add);
-        assertEquals(0, (new SearchAsync(list)).matchesCount(""));
-        assertEquals(0, (new SearchAsync(list)).matchesCount("Олежа"));
-        assertEquals(1, (new SearchAsync(list)).matchesCount("Олег"));
-        assertEquals(1, (new SearchAsync(list)).matchesCount("олег"));
+        assertEquals(0, (new SearchAsync(list)).matches(""));
+        assertEquals(0, (new SearchAsync(list)).matches("Олежа"));
+        assertEquals(1, (new SearchAsync(list)).matches("Олег"));
+        assertEquals(1, (new SearchAsync(list)).matches("олег"));
 
         Stream.of(
                         "Петрова Мария Сергеевна, 67890, petrova@mail.ru",                     // полный формат
@@ -55,10 +53,10 @@ class SearchAsyncTest {
                 .map(item -> new User.Builder().setLine(item).build())
                 .filter(UserABC::isValid)
                 .forEach(list::add);
-        assertEquals(0, (new SearchAsync(list)).matchesCount("иванов"));
-        assertEquals(1, (new SearchAsync(list)).matchesCount("КузнЕцов"));
-        assertEquals(1, (new SearchAsync(list)).matchesCount("Васильева Елена Александровна"));
-        assertEquals(6, (new SearchAsync(list)).matchesCount("ЕЕ"));
+        assertEquals(0, (new SearchAsync(list)).matches("иванов"));
+        assertEquals(1, (new SearchAsync(list)).matches("КузнЕцов"));
+        assertEquals(1, (new SearchAsync(list)).matches("Васильева Елена Александровна"));
+        assertEquals(6, (new SearchAsync(list)).matches("ЕЕ"));
     }
 
 }
