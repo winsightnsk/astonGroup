@@ -35,7 +35,7 @@ public abstract class UserABC {
             else logger.warn("пустой емеил");
             return false;
         }
-        if (username.matches("^([a-zA-Zа-яА-Я]+(\\s[a-zA-Zа-яА-Я]+)*)$")
+        if (username.matches("^([a-zA-Zа-яёА-ЯЁ]+(\\s[a-zA-Zа-яёА-ЯЁ]+)*)$")
                 && password >= 0
                 && email.matches("^([a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+\\.[a-zA-Z]+)$")) {
             return true;
